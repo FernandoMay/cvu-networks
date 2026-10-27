@@ -1,7 +1,9 @@
-import numpy as np
-from typing import List, Dict, Tuple, Set
-from dataclasses import dataclass, field
 import uuid
+from dataclasses import dataclass, field
+from typing import List, Set
+
+import numpy as np
+
 
 @dataclass(frozen=True)
 class CognitiveState:
@@ -12,19 +14,45 @@ class CognitiveState:
     cognitive_workload: float
 
     def to_array(self) -> np.ndarray:
-        return np.array([self.explicit_intent, self.attention_span, self.decision_confidence,
-        self.temporal_urgency, self.cognitive_workload])
+        return np.array(
+            [
+                self.explicit_intent,
+                self.attention_span,
+                self.decision_confidence,
+                self.temporal_urgency,
+                self.cognitive_workload,
+            ],
+            dtype=float,
+        )
+
 
 @dataclass(frozen=True)
 class UserNode:
     user_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
-    position: np.ndarray = field(default_factory=lambda: np.random.rand(3) * 100)
-    state: CognitiveState = None
+    position: np.ndarray = field(
+        default_factory=lambda: np.random.rand(3) * 100,
+        compare=False,
+        hash=False,
+    )
+    state: CognitiveState | None = field(default=None, compare=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.state is None:
-            self.state = CognitiveState(np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(),
-            np.random.rand())
+            object.__setattr__(
+                self,
+                "state",
+                CognitiveState(
+                    np.random.rand(),
+                    np.random.rand(),
+                    np.random.rand(),
+                    np.random.rand(),
+                    np.random.rand(),
+                ),
+            )
+
+    def __hash__(self) -> int:
+        return hash(self.user_id)
+
 
 class CoalitionEngine:
     def __init__(self, beta: float = 0.6):
@@ -38,26 +66,32 @@ class CoalitionEngine:
         return (1 - self.beta) * norm_phys_dist + self.beta * norm_neural_dist
 
     def calculate_utility(self, coalition: Set[UserNode]) -> float:
-        if not coalition: return 0.0
-        if len(coalition) == 1: return 1.0
-        total_dist = 0
-        count = 0
+        if not coalition:
+            return 0.0
+        if len(coalition) == 1:
+            return 1.0
+
+        total_dist = 0.0
         nodes = list(coalition)
+        count = 0
         for i in range(len(nodes)):
             for j in range(i + 1, len(nodes)):
                 total_dist += self.calculate_cognitive_distance(nodes[i], nodes[j])
                 count += 1
+
         avg_dist = total_dist / count if count > 0 else 1.0
         return 10.0 / (1.0 + avg_dist)
 
     def merge_and_split(self, users: List[UserNode]) -> List[Set[UserNode]]:
-        partitions = [{u} for u in users]
+        partitions = [{user} for user in users]
         stable = False
         iterations = 0
         max_iter = 1000
+
         while not stable and iterations < max_iter:
             iterations += 1
             stable = True
+
             for i in range(len(partitions)):
                 for j in range(i + 1, len(partitions)):
                     c1, c2 = partitions[i], partitions[j]
@@ -66,11 +100,17 @@ class CoalitionEngine:
                         partitions.pop(j)
                         stable = False
                         break
-                if not stable: break
-            if not stable: continue
+                if not stable:
+                    break
+
+            if not stable:
+                continue
+
             for i in range(len(partitions)):
                 coalition = partitions[i]
-                if len(coalition) < 2: continue
+                if len(coalition) < 2:
+                    continue
+
                 nodes = list(coalition)
                 for split_idx in range(1, len(nodes)):
                     s1 = set(nodes[:split_idx])
@@ -80,6 +120,8 @@ class CoalitionEngine:
                         partitions.append(s2)
                         stable = False
                         break
-                if not stable: break
+                if not stable:
+                    break
+
         return partitions
 
