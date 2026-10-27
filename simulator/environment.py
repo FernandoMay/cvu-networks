@@ -1,1 +1,88 @@
-import numpy as np\nimport random\nfrom typing import List, Dict\nfrom dataclasses import dataclass\nfrom core.coalition import UserNode, CoalitionEngine\n\n@dataclass\nclass SimulationConfig:\n    lambda_rate: float = 0.90\n    tau_lag: float = 50.0\n    num_edge_nodes: int = 4\n    edge_capacity: int = 30\n    edge_latency_base: float = 10.0\n    cloud_latency_base: float = 30.0\n    cloud_propagation_delay: float = 50.0\n    simulation_time: int = 100000\n    warmup_period: int = 35000\n\nclass EdgeNode:\n    def __init__(self, node_id: int, capacity: int, latency: float):\n        self.node_id = node_id\n        self.capacity = capacity\n        self.latency = latency\n        self.queue = 0\n\n    def is_full(self) -> bool:\n        return self.queue >= self.capacity\n\n    def process_task(self):\n        if self.queue > 0:\n            self.queue -= 1\n            return self.latency\n        return 0.0\n\nclass CloudNode:\n    def __init__(self, latency: float, prop_delay: float):\n        self.latency = latency\n        self.prop_delay = prop_delay\n        self.queue = 0\n\n    def process_task(self):\n        self.queue -= 1 if self.queue > 0 else 0\n        return self.latency + self.prop_delay\n\nclass CVUEnvironment:\n    def __init__(self, config: SimulationConfig):\n        self.config = config\n        self.edge_nodes = [EdgeNode(i, config.edge_capacity, config.edge_latency_base) for i in range(config.num_edge_nodes)]\n        self.cloud_node = CloudNode(config.cloud_latency_base, config.cloud_propagation_delay)\n        self.current_time = 0.0\n        self.tasks_processed = 0\n        self.dropped_tasks = 0\n\n    def get_telemetry(self, node_id: int):\n        return self.edge_nodes[node_id].queue\n\n    def route_task(self, user: UserNode, coalition_id: int, policy: str = " UAER\):\n if policy == \UAER\:\n if user.state.temporal_urgency >= 0.7:\n available_edge = [n for n in self.edge_nodes if not n.is_full()]\n if available_edge:\n node = random.choice(available_edge)\n node.queue += 1\n return \edge\, node.node_id\n else:\n self.cloud_node.queue += 1\n return \cloud\, None\n else:\n self.cloud_node.queue += 1\n return \cloud\, None\n return \cloud\, None\n\n def step(self):\n self.current_time += 1.0\n for node in self.edge_nodes:\n node.process_task()\n self.cloud_node.process_task()
+import numpy as np
+import random
+from typing import List, Dict, Tuple, Optional
+from dataclasses import dataclass
+from core.coalition import UserNode, CoalitionEngine
+
+@dataclass
+class SimulationConfig:
+    lambda_rate: float = 0.90
+    tau_lag: float = 50.0
+    num_edge_nodes: int = 4
+    edge_capacity: int = 30
+    edge_latency_base: float = 10.0
+    cloud_latency_base: float = 30.0
+    cloud_propagation_delay: float = 50.0
+    simulation_time: int = 100000
+    warmup_period: int = 35000
+
+class EdgeNode:
+    def __init__(self, node_id: int, capacity: int, latency: float):
+        self.node_id = node_id
+        self.capacity = capacity
+        self.latency = latency
+        self.queue = 0
+
+    def is_full(self) -> bool:
+        return self.queue >= self.capacity
+
+    def process_task(self) -> float:
+        if self.queue > 0:
+            self.queue -= 1
+            return self.latency
+        return 0.0
+
+class CloudNode:
+    def __init__(self, latency: float, prop_delay: float):
+        self.latency = latency
+        self.prop_delay = prop_delay
+        self.queue = 0
+
+    def process_task(self) -> float:
+        if self.queue > 0:
+            self.queue -= 1
+            return self.latency + self.prop_delay
+        return 0.0
+
+class CVUEnvironment:
+    def __init__(self, config: SimulationConfig):
+        self.config = config
+        self.edge_nodes = [EdgeNode(i, config.edge_capacity, config.edge_latency_base) for i in range(config.num_edge_nodes)]
+        self.cloud_node = CloudNode(config.cloud_latency_base, config.cloud_propagation_delay)
+        self.current_time = 0
+        self.tasks_processed = 0
+        self.total_latency = 0.0
+        self.dropped_tasks = 0
+
+    def route_task(self, user: UserNode, policy: str = " UAER\) -> Tuple[str, Optional[int]]:
+ if policy == \UAER\:
+ if user.state.temporal_urgency >= 0.7:
+ available_edge = [n for n in self.edge_nodes if not n.is_full()]
+ if available_edge:
+ node = random.choice(available_edge)
+ node.queue += 1
+ return \edge\, node.node_id
+
+ available_edge = [n for n in self.edge_nodes if not n.is_full()]
+ if available_edge:
+ node = random.choice(available_edge)
+ node.queue += 1
+ return \edge\, node.node_id
+
+ self.cloud_node.queue += 1
+ return \cloud\, None
+
+ def step(self) -> float:
+ self.current_time += 1
+ step_latency = 0.0
+ for node in self.edge_nodes:
+ lat = node.process_task()
+ if lat > 0:
+ step_latency += lat
+ self.tasks_processed += 1
+ cloud_lat = self.cloud_node.process_task()
+ if cloud_lat > 0:
+ step_latency += cloud_lat
+ self.tasks_processed += 1
+ self.total_latency += step_latency
+ return step_latency / (self.tasks_processed if self.tasks_processed > 0 else 1)
