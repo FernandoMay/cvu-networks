@@ -1,0 +1,6 @@
+CVU Simulation Metrics
+======================
+Average latency: 0.000161995156 ms
+Tasks processed: 90071
+Dropped tasks: 0
+Success rate: 1.0000
