@@ -1,4 +1,4 @@
-# CVU Networking: Paper-Ready Research Summary
+# Low-Latency Coalition-Aware Routing for Cognitive Virtual Universes
 
 ## Abstract
 
@@ -8,11 +8,11 @@ The proposed framework is motivated by the observation that conventional central
 
 ## 1. Introduction
 
-The emergence of cognitive virtual universes represents a new class of distributed immersive systems in which human intent, neural state, and virtual geometry are tightly coupled. Unlike conventional virtual reality or online gaming systems, CVUs are not only rendered environments; they are adaptive, user-aware, and cognitively responsive computational spaces. In these systems, the environment dynamically adjusts to the user state in real time, and therefore the networking layer becomes a first-order design constraint rather than a secondary implementation detail.
+The emergence of cognitive virtual universes represents a new class of distributed immersive systems in which human intent, neural state, and virtual geometry are tightly coupled. Unlike conventional virtual reality or online gaming systems, CVUs are not only rendered environments; they are adaptive, user-aware, and cognitively responsive computational spaces. In these systems, the environment changes in real time according to user state, and therefore the networking layer becomes a first-order design constraint rather than a secondary implementation detail.
 
-This design challenge is non-trivial. Neuroadaptive environments require the transmission of neural and biometric data streams, environment updates, and high-detail rendering information at very small time scales. Even modest delays can degrade realism, increase disorientation, or break the continuity of the cognitive loop between the user and the generated environment. For this reason, the network must be designed to minimize latency while supporting distributed coordination among users with similar cognitive states and interactive needs.
+This design challenge is non-trivial. Neuroadaptive environments require the transmission of neural and biometric data streams, environment updates, and high-detail rendering information at very small time scales. Even modest delays can degrade realism, increase disorientation, or break the continuity of the cognitive loop between the user and the generated environment. For this reason, the network must minimize latency while supporting distributed coordination among users with similar cognitive states and interactive needs.
 
-The present work addresses this issue by integrating coalition formation with urgency-aware routing in a CVU-oriented simulation environment. The essential idea is simple but powerful: users who share similar cognitive states or task demands should coordinate locally to reduce communication overhead and accelerate service delivery. By forming task-sharing coalitions and routing bursts through edge infrastructure before falling back to the cloud, the system can remain responsive even under traffic spikes.
+The present work addresses this issue by integrating coalition formation with urgency-aware routing in a CVU-oriented simulation environment. The essential idea is simple but powerful: users who share similar cognitive states or task demands should coordinate locally to reduce communication overhead and accelerate service delivery. By forming task-sharing coalitions and routing bursts through edge infrastructure before falling back to the cloud, the system remains responsive even under traffic spikes.
 
 The contribution of this work is therefore threefold: (i) to formalize cognitive state and coalition dynamics for virtual universe users, (ii) to integrate coalition-aware coordination with a latency-oriented edge-cloud routing policy, and (iii) to validate the approach through a reproducible simulation pipeline that produces measurable outputs consistent with the core assumptions of the model.
 
