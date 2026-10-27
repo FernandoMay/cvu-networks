@@ -1,1 +1,85 @@
-import numpy as np\nfrom typing import List, Dict, Tuple, Set\nfrom dataclasses import dataclass, field\nimport uuid\n\n@dataclass\nclass CognitiveState:\n    explicit_intent: float\n    attention_span: float\n    decision_confidence: float\n    temporal_urgency: float\n    cognitive_workload: float\n\n    def to_array(self) -> np.ndarray:\n        return np.array([self.explicit_intent, self.attention_span, self.decision_confidence, self.temporal_urgency, self.cognitive_workload])\n\n@dataclass\nclass UserNode:\n    user_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])\n    position: np.ndarray = field(default_factory=lambda: np.random.rand(3) * 100)\n    state: CognitiveState = None\n\n    def __post_init__(self):\n        if self.state is None:\n            self.state = CognitiveState(np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand())\n\nclass CoalitionEngine:\n    def __init__(self, beta: float = 0.6):\n        self.beta = beta\n\n    def calculate_cognitive_distance(self, user_i: UserNode, user_j: UserNode) -> float:\n        phys_dist = np.linalg.norm(user_i.position - user_j.position)\n        norm_phys_dist = min(phys_dist / 100.0, 1.0)\n        neural_dist = np.linalg.norm(user_i.state.to_array() - user_j.state.to_array())\n        norm_neural_dist = min(neural_dist / np.sqrt(5), 1.0)\n        return (1 - self.beta) * norm_phys_dist + self.beta * norm_neural_dist\n\n    def calculate_utility(self, coalition: Set[UserNode]) -> float:\n        if not coalition: return 0.0\n        if len(coalition) == 1: return 1.0\n        total_dist = 0\n        count = 0\n        nodes = list(coalition)\n        for i in range(len(nodes)):\n            for j in range(i + 1, len(nodes)):\n                total_dist += self.calculate_cognitive_distance(nodes[i], nodes[j])\n                count += 1\n        avg_dist = total_dist / count if count > 0 else 1.0\n        return 10.0 / (1.0 + avg_dist)\n\n    def merge_and_split(self, users: List[UserNode]) -> List[Set[UserNode]]:\n        partitions = [{u} for u in users]\n        stable = False\n        iterations = 0\n        max_iter = 1000\n        while not stable and iterations < max_iter:\n            iterations += 1\n            stable = True\n            for i in range(len(partitions)):\n                for j in range(i + 1, len(partitions)):\n                    c1, c2 = partitions[i], partitions[j]\n                    if self.calculate_utility(c1 | c2) > self.calculate_utility(c1) + self.calculate_utility(c2):\n                        partitions[i] = c1 | c2\n                        partitions.pop(j)\n                        stable = False\n                        break\n                if not stable: break\n            if not stable: continue\n            for i in range(len(partitions)):\n                coalition = partitions[i]\n                if len(coalition) < 2: continue\n                nodes = list(coalition)\n                for split_idx in range(1, len(nodes)):\n                    s1 = set(nodes[:split_idx])\n                    s2 = set(nodes[split_idx:])\n                    if self.calculate_utility(s1) + self.calculate_utility(s2) > self.calculate_utility(coalition):\n                        partitions[i] = s1\n                        partitions.append(s2)\n                        stable = False\n                        break\n                if not stable: break\n        return partitions
+import numpy as np
+from typing import List, Dict, Tuple, Set
+from dataclasses import dataclass, field
+import uuid
+
+@dataclass(frozen=True)
+class CognitiveState:
+    explicit_intent: float
+    attention_span: float
+    decision_confidence: float
+    temporal_urgency: float
+    cognitive_workload: float
+
+    def to_array(self) -> np.ndarray:
+        return np.array([self.explicit_intent, self.attention_span, self.decision_confidence,
+        self.temporal_urgency, self.cognitive_workload])
+
+@dataclass(frozen=True)
+class UserNode:
+    user_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
+    position: np.ndarray = field(default_factory=lambda: np.random.rand(3) * 100)
+    state: CognitiveState = None
+
+    def __post_init__(self):
+        if self.state is None:
+            self.state = CognitiveState(np.random.rand(), np.random.rand(), np.random.rand(), np.random.rand(),
+            np.random.rand())
+
+class CoalitionEngine:
+    def __init__(self, beta: float = 0.6):
+        self.beta = beta
+
+    def calculate_cognitive_distance(self, user_i: UserNode, user_j: UserNode) -> float:
+        phys_dist = np.linalg.norm(user_i.position - user_j.position)
+        norm_phys_dist = min(phys_dist / 100.0, 1.0)
+        neural_dist = np.linalg.norm(user_i.state.to_array() - user_j.state.to_array())
+        norm_neural_dist = min(neural_dist / np.sqrt(5), 1.0)
+        return (1 - self.beta) * norm_phys_dist + self.beta * norm_neural_dist
+
+    def calculate_utility(self, coalition: Set[UserNode]) -> float:
+        if not coalition: return 0.0
+        if len(coalition) == 1: return 1.0
+        total_dist = 0
+        count = 0
+        nodes = list(coalition)
+        for i in range(len(nodes)):
+            for j in range(i + 1, len(nodes)):
+                total_dist += self.calculate_cognitive_distance(nodes[i], nodes[j])
+                count += 1
+        avg_dist = total_dist / count if count > 0 else 1.0
+        return 10.0 / (1.0 + avg_dist)
+
+    def merge_and_split(self, users: List[UserNode]) -> List[Set[UserNode]]:
+        partitions = [{u} for u in users]
+        stable = False
+        iterations = 0
+        max_iter = 1000
+        while not stable and iterations < max_iter:
+            iterations += 1
+            stable = True
+            for i in range(len(partitions)):
+                for j in range(i + 1, len(partitions)):
+                    c1, c2 = partitions[i], partitions[j]
+                    if self.calculate_utility(c1 | c2) > self.calculate_utility(c1) + self.calculate_utility(c2):
+                        partitions[i] = c1 | c2
+                        partitions.pop(j)
+                        stable = False
+                        break
+                if not stable: break
+            if not stable: continue
+            for i in range(len(partitions)):
+                coalition = partitions[i]
+                if len(coalition) < 2: continue
+                nodes = list(coalition)
+                for split_idx in range(1, len(nodes)):
+                    s1 = set(nodes[:split_idx])
+                    s2 = set(nodes[split_idx:])
+                    if self.calculate_utility(s1) + self.calculate_utility(s2) > self.calculate_utility(coalition):
+                        partitions[i] = s1
+                        partitions.append(s2)
+                        stable = False
+                        break
+                if not stable: break
+        return partitions
+

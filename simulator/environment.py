@@ -47,42 +47,43 @@ class CloudNode:
 class CVUEnvironment:
     def __init__(self, config: SimulationConfig):
         self.config = config
-        self.edge_nodes = [EdgeNode(i, config.edge_capacity, config.edge_latency_base) for i in range(config.num_edge_nodes)]
+        self.edge_nodes = [EdgeNode(i, config.edge_capacity, config.edge_latency_base) for i in
+        range(config.num_edge_nodes)]
         self.cloud_node = CloudNode(config.cloud_latency_base, config.cloud_propagation_delay)
         self.current_time = 0
         self.tasks_processed = 0
         self.total_latency = 0.0
         self.dropped_tasks = 0
 
-    def route_task(self, user: UserNode, policy: str = " UAER\) -> Tuple[str, Optional[int]]:
- if policy == \UAER\:
- if user.state.temporal_urgency >= 0.7:
- available_edge = [n for n in self.edge_nodes if not n.is_full()]
- if available_edge:
- node = random.choice(available_edge)
- node.queue += 1
- return \edge\, node.node_id
+    def route_task(self, user: UserNode, policy: str = 'UAER') -> Tuple[str, Optional[int]]:
+        if policy == 'UAER':
+            if user.state.temporal_urgency >= 0.7:
+                available_edge = [n for n in self.edge_nodes if not n.is_full()]
+                if available_edge:
+                    node = random.choice(available_edge)
+                    node.queue += 1
+                    return 'edge', node.node_id
 
- available_edge = [n for n in self.edge_nodes if not n.is_full()]
- if available_edge:
- node = random.choice(available_edge)
- node.queue += 1
- return \edge\, node.node_id
+        available_edge = [n for n in self.edge_nodes if not n.is_full()]
+        if available_edge:
+            node = random.choice(available_edge)
+            node.queue += 1
+            return 'edge', node.node_id
 
- self.cloud_node.queue += 1
- return \cloud\, None
+        self.cloud_node.queue += 1
+        return 'cloud', None
 
- def step(self) -> float:
- self.current_time += 1
- step_latency = 0.0
- for node in self.edge_nodes:
- lat = node.process_task()
- if lat > 0:
- step_latency += lat
- self.tasks_processed += 1
- cloud_lat = self.cloud_node.process_task()
- if cloud_lat > 0:
- step_latency += cloud_lat
- self.tasks_processed += 1
- self.total_latency += step_latency
- return step_latency / (self.tasks_processed if self.tasks_processed > 0 else 1)
+    def step(self) -> float:
+        self.current_time += 1
+        step_latency = 0.0
+        for node in self.edge_nodes:
+            lat = node.process_task()
+            if lat > 0:
+                step_latency += lat
+                self.tasks_processed += 1
+        cloud_lat = self.cloud_node.process_task()
+        if cloud_lat > 0:
+            step_latency += cloud_lat
+            self.tasks_processed += 1
+        self.total_latency += step_latency
+        return step_latency / (self.tasks_processed if self.tasks_processed > 0 else 1)
