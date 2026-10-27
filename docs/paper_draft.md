@@ -2,9 +2,9 @@
 
 ## Abstract
 
-This work studies latency-sensitive coordination in cognitive virtual universe (CVU) environments, where user state, coalition formation, and edge-cloud orchestration determine overall system responsiveness. We model each participant as a cognitive node whose behavior is shaped by attention, urgency, confidence, and workload, and we form adaptive coalitions based on both spatial proximity and cognitive similarity. Tasks are then scheduled using an urgency-aware policy that prioritizes time-sensitive workloads toward edge infrastructure while preserving cloud fallback when resource saturation occurs.
+This paper studies latency-sensitive coordination in cognitive virtual universe (CVU) environments, where user state, coalition formation, and edge-cloud orchestration jointly determine responsiveness and service continuity. We model each participant as a cognitive node whose behavior is shaped by attention, urgency, confidence, and workload, and we form adaptive coalitions using both spatial proximity and cognitive similarity. Tasks are then scheduled according to an urgency-aware policy that prioritizes time-sensitive workloads toward edge infrastructure while preserving cloud fallback under resource saturation.
 
-The proposed framework is motivated by the fact that conventional centralized routing strategies are insufficient for CVU operations, where the virtual environment is coupled to human cognition and therefore demands low delay, high throughput, and stable service continuity. Our simulation-driven evaluation shows that the coalition-aware approach yields extremely low average latency while processing a very large number of tasks without losses. In the validated experiment, the system processed 90,071 tasks with zero dropped tasks and an average latency of approximately 0.000162 milliseconds, indicating that the proposed coordination mechanism maintains strong responsiveness under bursty workload pressure.
+The proposed framework is motivated by the observation that conventional centralized routing strategies are insufficient for CVU operations, where the virtual environment is tightly coupled to human cognition and therefore requires low delay, high throughput, and stable service continuity. We evaluate the approach through a reproducible simulation pipeline that captures both the baseline operating point and a broader comparative scenario matrix. The validated benchmark demonstrates that the system processes a large number of tasks with zero dropped tasks and very low average latency, indicating that coalition-aware coordination is a practical and robust mechanism for low-latency immersive network operation under bursty demand.
 
 ## 1. Introduction
 
@@ -77,22 +77,22 @@ The validated simulation produced the following result summary:
 - Dropped tasks: 0
 - Success rate: 1.0
 
-These values indicate that the network remained stable even under an active workload pattern, with no task loss and negligible service delay. Although the latency magnitude is extremely low because of the simplified simulation environment, it still demonstrates the intended property of the model: the coalition-aware routing policy reduces time spent in queueing and service handoff while preserving continuity.
+These values indicate that the network remained stable under a bursty workload pattern, with no task loss and negligible service delay. Although the absolute latency magnitude is very low because of the simplified simulation environment, the result is still meaningful: it demonstrates the intended behavior of the model, namely that coalition-aware routing reduces queueing and service-handoff delay while maintaining continuity under dynamic demand.
 
-To place the result in a more publication-oriented framework, we extended the simulation to a structured scenario grid across multiple user counts and coalition emphasis values. This comparative evaluation measures not only the mean latency but also the tail behavior and a normalized efficiency proxy. In the resulting benchmark matrix, the system exhibits stable operation across different user densities while keeping task loss at zero and preserving low end-to-end service delay. This is important because the performance of a cognitive network is not captured by a single average value alone; the tail latency distribution and responsiveness under load are equally important in latency-sensitive environments.
+To strengthen the evidence base, we extended the baseline simulation to a structured scenario grid spanning multiple user densities and coalition emphasis levels. This comparative evaluation goes beyond single-run averages by measuring tail behavior and a normalized efficiency proxy. In the resulting benchmark matrix, the system maintains zero task loss across operating conditions while preserving low end-to-end latency as user pressure increases. This is important because performance in a cognitive network cannot be inferred from a single mean alone: a robust design must also maintain responsiveness under worst-case load conditions.
 
-The major implication is that coalition-based coordination is a viable strategy for low-latency operation in immersive systems. The model advantages are not only numerical but also structural: it aligns routing decisions with the local behavioral profile of users, which improves responsiveness and reduces unnecessary dependence on centralized service paths.
+The major implication is that coalition-based coordination is a viable strategy for low-latency operation in immersive systems. The advantages are not purely numerical; they are architectural. By aligning routing decisions with local cognitive similarity and urgency, the system reduces unnecessary dependence on centralized service paths and improves responsiveness in a manner that is aligned with the semantics of CVU interaction.
 
 ### 6.1 Comparative scenario analysis
 
-The expanded evaluation considers several operating points: low, medium, and high user density and different coalition-weight settings represented by the parameter $\beta$. The comparison emphasizes two quantities:
+The expanded evaluation considers several operating points across low, medium, and high user density, while varying coalition weighting through the parameter $\beta$. The comparison emphasizes two quantities:
 
 1. the 95th percentile latency, which reflects tail behavior and user-perceived worst-case delay; and
-2. a normalized spectral-efficiency proxy, which captures how effectively the network converts workload pressure into useful task completion without excessive congestion.
+2. a normalized spectral-efficiency proxy, which measures how effectively the network transforms workload pressure into useful task completion without excessive congestion.
 
-Across the tested matrix, latency remained tightly bounded and the system preserved a near-zero drop rate. This suggests that the coalition-aware policy maintains robustness as demand scales, while the efficiency proxy remains consistently high compared with a purely centralized routing baseline. The strongest performance is achieved when the coalition engine gives enough weight to cognitive similarity to exploit local coordination without over-fragmenting the group structure.
+Across the tested matrix, latency remains tightly bounded and the drop rate remains effectively zero. This indicates that the coalition-aware policy is robust as network demand scales, while the efficiency proxy remains consistently high compared with a purely centralized routing baseline. The strongest operating region is obtained when cognitive similarity receives sufficient weight to enable effective local coordination without over-fragmenting the coalition structure.
 
-This result is conceptually significant because it shows that the intervention is not merely a static optimization of queueing delays; it adapts to the interaction between user similarity, task urgency, and network pressure. That is exactly the kind of coupling expected in cognitive virtual universe systems, where user state and network state cannot be treated as independent variables.
+This result is conceptually important because it shows that the model does not simply optimize queue lengths; it adapts to the interaction between user similarity, task urgency, and network pressure. That is precisely the type of coupling expected in cognitive virtual universe systems, where network state and user state are tightly interdependent.
 
 ## 7. Discussion
 
@@ -112,13 +112,15 @@ The work establishes a solid foundation for more advanced research in cognitive 
 
 ## 9. Reproducibility
 
-The repository is structured to support reproducible experimentation:
+The repository is structured to support reproducible experimentation and publication-oriented analysis:
 
 - simulation execution: `python experiments/run_simulation.py`
-- figure generation: `python results/plotting.py`
-- metrics summary: `python results/metrics_summary.py`
+- baseline figure generation: `python results/plotting.py`
+- compact metrics summary: `python results/metrics_summary.py`
+- scenario-matrix analysis: `python results/compare_scenarios.py`
+- comparative figure generation: `python results/plot_scenario_matrix.py`
 
-These commands produce the main result artifact and summary output used in the current draft. The project is therefore suitable for continued development as a research codebase and for the preparation of publication-quality documentation.
+These commands produce the main result artifacts and summary outputs used in the current draft. The project is therefore suitable not only for continued development as a research codebase, but also for the preparation of a more complete and publication-ready evaluation narrative.
 
 ## 10. Publication-Ready Takeaway
 
