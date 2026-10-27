@@ -47,16 +47,22 @@ The project targets the problem of efficient task placement and coalition-aware 
    python results/metrics_summary.py
    ```
 
+6. Generate a comparative scenario matrix for publication-facing analysis:
+
+   ```bash
+   python results/plot_scenario_matrix.py
+   ```
+
 ## Current validated result
 
 The repository currently produces the following output from the simulation:
 
-- Average latency: 0.00016121139370385554 ms
-- Tasks processed: 90061
+- Average latency: 0.00016199515581773036 ms
+- Tasks processed: 90,071
 - Dropped tasks: 0
 
-This result is stored in `results/simulation_results.json` and is consistent with the current simulator setup.
+The project also includes a comparative scenario grid stored in `results/scenario_comparison.json`, with a summary plot generated at `results/scenario_matrix.png`.
 
 ## Notes
 
-This project is structured for research reproducibility and extension. The next stage of the workflow is to expand the results section with additional baselines, ablation studies, and publication-ready figures.
+This project is structured for research reproducibility and extension. The current version includes a validated baseline plus a comparative multi-scenario evaluation intended to support the paper narrative and publication-style analysis.
