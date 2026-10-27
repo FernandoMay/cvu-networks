@@ -35,11 +35,16 @@ def run_single_scenario(num_users: int, beta: float, simulation_time: int = 2000
         if t > config.warmup_period:
             latencies.append(avg_lat)
 
+    p95_latency = float(np.percentile(latencies, 95)) if latencies else 0.0
+    spectral_efficiency_proxy = float((env.tasks_processed + 1.0) / max(1.0, num_users * (p95_latency + 1e-6)))
+
     return {
         "num_users": num_users,
         "beta": beta,
         "coalitions": len(coalitions),
         "avg_latency": float(np.mean(latencies)) if latencies else 0.0,
+        "p95_latency": p95_latency,
+        "spectral_efficiency_proxy": spectral_efficiency_proxy,
         "tasks_processed": int(env.tasks_processed),
         "dropped_tasks": int(env.dropped_tasks),
     }

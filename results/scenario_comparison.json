@@ -1,0 +1,202 @@
+[
+  {
+    "num_users": 20,
+    "beta": 0.0,
+    "coalitions": 10,
+    "avg_latency": 0.0010093099040568696,
+    "p95_latency": 0.0022857665425566652,
+    "spectral_efficiency_proxy": 17969.0,
+    "tasks_processed": 17968,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 20,
+    "beta": 0.4,
+    "coalitions": 10,
+    "avg_latency": 0.0010066906567483564,
+    "p95_latency": 0.0022732956072016443,
+    "spectral_efficiency_proxy": 18014.0,
+    "tasks_processed": 18013,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 20,
+    "beta": 0.6,
+    "coalitions": 10,
+    "avg_latency": 0.0010069006376534463,
+    "p95_latency": 0.002276918884006406,
+    "spectral_efficiency_proxy": 17985.0,
+    "tasks_processed": 17984,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 20,
+    "beta": 0.8,
+    "coalitions": 10,
+    "avg_latency": 0.001003086782969196,
+    "p95_latency": 0.002263518876869102,
+    "spectral_efficiency_proxy": 18005.0,
+    "tasks_processed": 18004,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 20,
+    "beta": 1.0,
+    "coalitions": 10,
+    "avg_latency": 0.000999909964824187,
+    "p95_latency": 0.0022558596056325175,
+    "spectral_efficiency_proxy": 17988.0,
+    "tasks_processed": 17987,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 50,
+    "beta": 0.0,
+    "coalitions": 25,
+    "avg_latency": 0.0010082338021461185,
+    "p95_latency": 0.0022883818959561664,
+    "spectral_efficiency_proxy": 17913.0,
+    "tasks_processed": 17912,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 50,
+    "beta": 0.4,
+    "coalitions": 25,
+    "avg_latency": 0.0010009848663613634,
+    "p95_latency": 0.002256368610715283,
+    "spectral_efficiency_proxy": 18014.0,
+    "tasks_processed": 18013,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 50,
+    "beta": 0.6,
+    "coalitions": 25,
+    "avg_latency": 0.0010044028642370994,
+    "p95_latency": 0.0022655701411911557,
+    "spectral_efficiency_proxy": 18023.0,
+    "tasks_processed": 18022,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 50,
+    "beta": 0.8,
+    "coalitions": 25,
+    "avg_latency": 0.0010078708786426297,
+    "p95_latency": 0.00227484702713502,
+    "spectral_efficiency_proxy": 18033.0,
+    "tasks_processed": 18032,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 50,
+    "beta": 1.0,
+    "coalitions": 25,
+    "avg_latency": 0.0010022012467609408,
+    "p95_latency": 0.0022548422841027027,
+    "spectral_efficiency_proxy": 18064.0,
+    "tasks_processed": 18063,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 100,
+    "beta": 0.0,
+    "coalitions": 50,
+    "avg_latency": 0.0010052342527235645,
+    "p95_latency": 0.0022665971681691665,
+    "spectral_efficiency_proxy": 18037.0,
+    "tasks_processed": 18036,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 100,
+    "beta": 0.4,
+    "coalitions": 50,
+    "avg_latency": 0.0010040570133161408,
+    "p95_latency": 0.0022645440445122843,
+    "spectral_efficiency_proxy": 18023.0,
+    "tasks_processed": 18022,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 100,
+    "beta": 0.6,
+    "coalitions": 50,
+    "avg_latency": 0.0010059964687046971,
+    "p95_latency": 0.0022821150749403225,
+    "spectral_efficiency_proxy": 17909.0,
+    "tasks_processed": 17908,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 100,
+    "beta": 0.8,
+    "coalitions": 50,
+    "avg_latency": 0.0010132321858852126,
+    "p95_latency": 0.0022957368276228514,
+    "spectral_efficiency_proxy": 17986.0,
+    "tasks_processed": 17985,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 100,
+    "beta": 1.0,
+    "coalitions": 50,
+    "avg_latency": 0.0010065844767891943,
+    "p95_latency": 0.002267111030915804,
+    "spectral_efficiency_proxy": 18071.0,
+    "tasks_processed": 18070,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 200,
+    "beta": 0.0,
+    "coalitions": 100,
+    "avg_latency": 0.0010083592836348364,
+    "p95_latency": 0.002277437438039808,
+    "spectral_efficiency_proxy": 18022.0,
+    "tasks_processed": 18021,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 200,
+    "beta": 0.4,
+    "coalitions": 100,
+    "avg_latency": 0.0010040812765310313,
+    "p95_latency": 0.00227484702713502,
+    "spectral_efficiency_proxy": 17924.0,
+    "tasks_processed": 17923,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 200,
+    "beta": 0.6,
+    "coalitions": 100,
+    "avg_latency": 0.0010085398404740358,
+    "p95_latency": 0.0022826359987450995,
+    "spectral_efficiency_proxy": 17977.0,
+    "tasks_processed": 17976,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 200,
+    "beta": 0.8,
+    "coalitions": 100,
+    "avg_latency": 0.001007978215288076,
+    "p95_latency": 0.002277956228321891,
+    "spectral_efficiency_proxy": 18006.0,
+    "tasks_processed": 18005,
+    "dropped_tasks": 0
+  },
+  {
+    "num_users": 200,
+    "beta": 1.0,
+    "coalitions": 100,
+    "avg_latency": 0.0010065889927483558,
+    "p95_latency": 0.0022805537291196755,
+    "spectral_efficiency_proxy": 17941.0,
+    "tasks_processed": 17940,
+    "dropped_tasks": 0
+  }
+]
